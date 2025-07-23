@@ -1,0 +1,10 @@
+steps for github
+ if i have change in my file
+ git pull origin main (first pull others files then push our to our branch)
+ git add . 
+ git commit -m "message"
+ git push origin khushi
+
+
+ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4N2RjYWM2ZGMxOTA3NTBjNDliNTdjOCIsImlhdCI6MTc1MzA4MjU2MiwiZXhwIjoxNzUzMDg2MTYyfQ.Sk1pgiV0ES5JM5e2cttmsELBgpsq-woIH3bd9UQl9AE",
+    "id": "687dcac6dc190750c49b57c8
