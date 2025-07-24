@@ -10,8 +10,10 @@ const MemberCard = ({ member, showFollow }) => {
   const [isFollowing, setIsFollowing] = useState(false);
 
   const handleFriend = async () => {
-    await addFriend(member._id);
-    setIsFriend(true);
+   const data= await addFriend(localStorage.getItem('userId'),member._id,member.fullName,'accepted');
+   console.log('friend add status',data); 
+   setIsFriend(true);
+   alert('Friend request sent successfully!');
   };
   const handleSendMessage = () => {
     // Toggle the message box
@@ -25,10 +27,10 @@ const MemberCard = ({ member, showFollow }) => {
     <div className="card p-4 mb-4 shadow-sm d-flex align-items-center gap-4 flex-row" style={{ fontSize: '1.1rem' }}>
       
       {/* 🔹 Profile Picture */}
-      {member.profilePic ? (
+      {member.profilePhoto? (
         <img
-          src={member.profilePic}
-          alt={`${member.username}'s profile`}
+          src={member.profilePhoto}
+          alt={`${member.fullName}'s profile`}
           style={{
             width: '80px',
             height: '80px',
@@ -52,15 +54,16 @@ const MemberCard = ({ member, showFollow }) => {
   
       {/* 🔹 Member Info + Buttons */}
       <div className="flex-grow-1">
-        <h4 className="mb-3" style={{ fontSize: '1.5rem' }}>{member.username}</h4>
+        <h4 className="mb-3" style={{ fontSize: '1.5rem' }}>{member.fullName}</h4>
   
         <div className="d-flex flex-wrap gap-3 mb-3">
           <button
             className="btn btn-success btn-lg"
             style={{ minWidth: '140px' }}
             onClick={handleFriend}
+            disabled={isFriend}
           >
-            {isFriend ? 'Friend' : 'Add Friend'}
+            {isFriend ? 'Friends' : 'Add Friend'}
           </button>
   
           <button

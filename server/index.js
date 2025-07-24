@@ -12,8 +12,9 @@ const messageRoutes = require('./routes/messageRoutes')
 const memberRoutes = require('./routes/memberRoutes');  
 const friendRoutes = require("./routes/friendRoutes")
 const connectDB = require("./config/db");
+const groupRoutes= require('./routes/groupRoutes');
 const PORT = process.env.PORT || 5000;
-const MONGO_URL = process.env.MONGO_URL;
+const MONGO_URL = process.env.MONGO_URL_DEV || "mongodb://localhost:27017/socialNetworking";
 const app= express()
 connectDB();
 
@@ -31,6 +32,7 @@ app.use('/api', memberRoutes);
 app.use('/api/friends', friendRoutes);
 app.use('/uploads', express.static('public/uploads')); // Serve static files from the uploads directory
 
+app.use('/api/groups', require('./routes/groupRoutes'));
 app.use(notFound);
 app.use(errorHandler);
 

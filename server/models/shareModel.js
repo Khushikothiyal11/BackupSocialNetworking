@@ -11,4 +11,4 @@ const shareSchema = new mongoose.Schema(
 // Optional: Enforce one share per user per post
 shareSchema.index({ post: 1, user: 1 }, { unique: true });
 
-module.exports = mongoose.model("Share", shareSchema);
+ 

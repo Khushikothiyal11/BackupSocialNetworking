@@ -1,54 +1,65 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { getProfile } from '../api/api';
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { getProfile } from "../api/api";
 
 const ProfileView = () => {
   const { id } = useParams();
   const [profile, setProfile] = useState(null);
 
   useEffect(() => {
-    getProfile(id).then(data => setProfile(data));
+    const userId = id || localStorage.getItem("setProfile");
+    if (userId) {
+      getProfile(userId).then((data) => setProfile(data));
+    }
   }, [id]);
 
   return profile ? (
-    <div className="container mt-4 d-flex" style={{ gap: '2rem' }}>
-      
-      {/* Left: Profile Sidebar */}
-      <div style={{ width: '250px', textAlign: 'center' }}>
-      {profile.profilePic && (
-  <img
-    src={profile.profilePic}
-    alt="Profile"
-    style={{
-      width: '120px',
-      height: '120px',
-      objectFit: 'cover',
-      borderRadius: '50%',
-      boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-      border: '2px solid #ddd',
-      marginBottom: '20px'
-    }}
-  />
-)}
+    <div className="container-fluid min-vh-100 p-4 bg-light">
+      <div className="row justify-content-center">
+        {/* Sidebar */}
+        <div className="col-md-3 text-center mb-4">
+          {profile.profilePhoto && (
+            <img
+              src={profile.profilePhoto}
+              alt="Profile"
+              className="rounded-circle shadow-sm mb-3"
+              style={{ width: "150px", height: "150px", objectFit: "cover" }}
+            />
+          )}
+          <h4>{profile.fullName}</h4>
+          <p className="text-muted">{profile.email}</p>
+        </div>
 
-        <h4>{profile.username}</h4>
-        <p>{profile.email}</p>
+        {/* Main Content */}
+        <div className="col-md-7">
+          <div className="card p-4 shadow-sm">
+            <h5 className="mb-4">About Me</h5>
+
+            {profile.bio && (
+              <p>
+                <strong>Bio:</strong> {profile.bio}
+              </p>
+            )}
+
+            <p>
+              <strong>Joined:</strong>{" "}
+              {new Date(profile.createdAt).toLocaleDateString()}
+            </p>
+
+            {profile.posts?.length >= 0 && (
+              <p>
+                <strong>Posts:</strong> {profile.posts.length}
+              </p>
+            )}
+          </div>
+        </div>
       </div>
-  
-      {/* Right: Detailed Info */}
-      <div>
-        <h5>About</h5>
-        <p><strong>Bio:</strong> {profile.bio}</p>
-        <p><strong>Age:</strong> {profile.age}</p>
-        <p><strong>Joined:</strong> {new Date(profile.joinedAt).toLocaleDateString()}</p>
-        <p><strong>Friends:</strong> {profile.friends?.length || 0}</p>
-        <p><strong>Messages:</strong> {profile.messages?.length || 0}</p>
-      </div>
-  
     </div>
   ) : (
-    <p>Loading...</p>
+    <div className="d-flex justify-content-center align-items-center min-vh-100">
+      <span className="spinner-border text-primary"></span>
+    </div>
   );
-}
+};
 
 export default ProfileView;

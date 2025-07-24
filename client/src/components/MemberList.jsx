@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import MemberCard from '../pages/MemberCard';
-import { getMembers } from '../api/api';
+import { getAllRegisteredUsers, getMembers } from '../api/api';
 
 const MemberList = () => {
   const [members, setMembers] = useState([]);
 
   useEffect(() => {
-    getMembers()
+    getAllRegisteredUsers()
       .then(data => {
         console.log('Fetched members:', data);
         setMembers(data);

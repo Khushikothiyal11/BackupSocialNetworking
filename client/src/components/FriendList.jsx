@@ -1,17 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const FriendList = () => {
   const [friends, setFriends] = useState([]);
-  const [name, setName] = useState('');
-  const [imageUrl, setImageUrl] = useState('');
+  const [name, setName] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
 
   // Fetch all friends
   const fetchFriends = () => {
-    axios.get('http://localhost:5000/api/friends')
-      .then(res => setFriends(res.data))
-      .catch(err => console.error(err));
+    axios
+      .get("http://localhost:5000/api/friends")
+      .then((res) => setFriends(res.data))
+      .catch((err) => console.error(err));
   };
 
   useEffect(() => {
@@ -20,23 +21,25 @@ const FriendList = () => {
 
   // Add a new friend
   const handleAddFriend = () => {
-    axios.post('http://localhost:5000/api/friends/add', {
-      name,
-      profileImage: imageUrl || undefined
-    })
-    .then(() => {
-      setName('');
-      setImageUrl('');
-      fetchFriends();
-    })
-    .catch(err => console.error(err));
+    axios
+      .post("http://localhost:5000/api/friends/add", {
+        name,
+        profileImage: imageUrl || undefined,
+      })
+      .then(() => {
+        setName("");
+        setImageUrl("");
+        fetchFriends();
+      })
+      .catch((err) => console.error(err));
   };
 
   // Delete a friend
   const handleDelete = (id) => {
-    axios.delete(`http://localhost:5000/api/friends/${id}`)
+    axios
+      .delete(`http://localhost:5000/api/friends/${id}`)
       .then(() => fetchFriends())
-      .catch(err => console.error(err));
+      .catch((err) => console.error(err));
   };
 
   return (
@@ -72,7 +75,7 @@ const FriendList = () => {
 
       {/* Friend Cards */}
       <div className="row">
-        {friends.map(friend => (
+        {friends.map((friend) => (
           <div className="col-md-4" key={friend._id}>
             <div className="card mb-4 shadow-sm">
               <img

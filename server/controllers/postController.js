@@ -11,10 +11,14 @@ const HttpError = require('../models/errorModel')
 //CREATE POST
 //POST:api/posts
 //PROTECTED
+
+
+
+
 const createPost=async(req,res,next)=>{
   try{
     //console.log('**********',req);
-   const{body,userid}=req.body;
+   const{body,creator}=req.body;
     // const { body } = req.body;
     // const userId = req.user?._id;
 
@@ -32,7 +36,7 @@ const createPost=async(req,res,next)=>{
       //imags should be less than 1mb
       if(image.size>1000000)
       {
-        return next(new HttpError("Profile picture too big.Should be less thgan 500kb"),422)
+        return next(new HttpError("Profile picture too big.Should be less thgan 500kb"),422);
       }
    
     //rename image
@@ -53,7 +57,12 @@ const createPost=async(req,res,next)=>{
       //save the post to db
      
       const postmodel = new PostModel({
-        creator: userid,
+        creator: creator,
+        // createdBy: {
+        //   fullName: user.fullName,
+        //   _id: user._id,
+        //   profilePhoto: user.profilePhoto
+        // },      
         body,
         image: result.secure_url
       });
@@ -67,7 +76,7 @@ const createPost=async(req,res,next)=>{
       });
       
       // Now update the user to include this post
-      await UserModel.findByIdAndUpdate(userid, {
+      await UserModel.findByIdAndUpdate(creator, {
         $push: { posts: postmodel._id }
       });
       
@@ -91,7 +100,7 @@ const createPost=async(req,res,next)=>{
   const getPost=async (req,res,next)=>{
     try{
       const{id}=req.params;
-      const post= await PostModel.findById(id)
+      const post= await PostModel.findById(id).populate('creator')
       //const post=await PostModel.findById(id).populate("creator").populate({path:"comments",options:{sort:{createdAt:-1}}})
       res.json(post)
     }
@@ -106,7 +115,9 @@ const createPost=async(req,res,next)=>{
   // //PROTECTED
   const getPosts=async(req,res,next)=>{
     try{
-      const posts=await PostModel.find().sort({createdAt:-1})
+      const posts=await PostModel.find().populate('creator').then((posts)=>{
+        return posts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      }); 
       res.json(posts)
     }
     catch(error){
